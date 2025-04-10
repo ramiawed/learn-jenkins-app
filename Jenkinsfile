@@ -44,6 +44,10 @@ pipeline {
                     reuseNode true
                 }
             }
+            // & sign use to not block the operation by the serve
+            // --reporter=html to generate the html reports for e2e test
+            // Try to run this script in Jenkins Dashboard > Manage Jenkins > section “Tools and actions” > Script Console:
+            // System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "sandbox allow-scripts;")
             steps {
                 sh '''
                     npm install serve
@@ -58,6 +62,7 @@ pipeline {
     post {
         always {
             junit 'jest-results/junit.xml'
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
     }
 }
